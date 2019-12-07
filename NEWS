@@ -1,0 +1,281 @@
+Version 1.1.1 (2019-07-27)
+
+  This is a maintenance release with numerous fixes and the following
+  few new features:
+
+  From the file properties dialog you can now choose to specifically save a
+  gig file in GigaStudio v4 file format (from the main menu select
+  "File" -> "Properties" -> "File Format"). So you can override the file
+  format version of already existing gig files that way.
+
+  There is now a combo box and checkbox on "Misc" tab which allow to define
+  when precisely release trigger samples shall be played. This is an
+  extension of the original gig file format. You have the option to play
+  release trigger samples only on note-off events (which is now the default
+  behaviour in the latest release version of LinuxSampler), or only on
+  sustain pedal up events, or both on note-off events and on sustain pedal
+  up events. These are options on dimension region level, so you can
+  override this behaviour even for individual cases, not just for the
+  entire instrument.
+
+  When working on gig files with more than one real-time instrument script
+  per file, it was sometimes a bit tedious to keep track of which instrument
+  was using which script exactly, because it involved a right-click on the
+  individual instrument to get to the script slots dialog of the instrument,
+  which finally listed the scripts being used. You no longer have to do that
+  just to check which scripts are being used: Just hover your mouse over the
+  "Scripts" column of the instruments table on the left hand side of
+  gigedit; a coloured popup will appear with the list of scripts currently
+  being assigned to the instrument.
+
+  Likewise it is a very common task to remove all scripts from an
+  instrument. There is now a keyboard shortcut for that: Just select the
+  instrument from the instruments list and then hit Shift + Backspace.
+
+  Gigedit provides a large number of tooltips when you are hovering your
+  mouse over the huge amount of individual controls and menu items the
+  application is offering in the meantime. In case you find that annoying,
+  you can now disable those particular tooltips which are specifically
+  intended for beginners from the main menu by unchecking "View" ->
+  "Tooltips for Beginners". All other tooltips that are still useful for
+  daily work with gigedit are still being shown when this option is
+  unchecked.
+
+  The previous release of gigedit introduced "Macros" for quickly
+  performing frequently used sequences of editor actions, and you were able
+  to assign your macros to keyboard function keys F1 .. F12. In this release
+  you can now also assign macros to function keys up to F19, in case you own
+  one of those keyboards with such a large amount of function keys.
+
+Version 1.1.0 (2017-11-25)
+
+  This release adds various improvements for the NKSP real-time instrument
+  script editor of gigedit. LinuxSampler's NKSP script editor API is now
+  used by gigedit to visualize all issues of scripts (errors and warnings)
+  in real-time while you are typing with the script editor. The respective
+  locations of script errors / warnings are automatically highlighted in
+  red and yellow color respectively and when the mouse pointer is moved
+  over those code locations, then the precise error / warning message is
+  displayed as tooltip. And since gigedit's script editor is now tightly
+  coupled with the sampler's script engine this way, all the heavy work of
+  handling all aspects of the script language is now performed by the actual
+  sampler's script engine and thus you can now be sure and immediately see
+  whether there are any issues with your scripts with any character you are
+  typing, and if yes what kind of issues exactly, and that without
+  requiring to actually load the script into the sampler. To use these
+  features, gigedit must be compiled and linked against liblinuxsampler.
+  If gigedit is not compiled with liblinuxsampler support then the old hand
+  written, error prone and very feature limited script editor implementation
+  is used instead. Needless to say that compiling gigedit without
+  liblinuxsampler support is discouraged. Additionally when clicking on the
+  script editor's "Apply" button or using Ctrl+S keyboard shortcut, then
+  the script is automatically reloaded by the sampler. So you no longer
+  have to reload the respective instrument manually while you are
+  developing instrument scripts. There are also visual enhancements for the
+  script editor, for example the line numbers are now shown on the left,
+  the font size can be altered by the user, and unused code portions (i.e.
+  disabled by NKSP preprocessor statements) are automatically striked
+  through.
+
+  Another major new feature in this release are macros. A macro is a set of
+  changes that should be applied to currently selected instrument. Such
+  macros can be reviewed and edited, and they can be saved permanently for
+  example as templates for common instrument creation tasks. Macros can be
+  assigned to F keys on the keyboard so that they can be quickly triggered,
+  you can transfer them over the OS clipboard and you can write comments
+  to your macros so that you never forget what kind of purpose you had in
+  mind for them. The macro features are based on libgig's new
+  "Serialization" framework and accordingly you need at least libgig 4.1.0
+  for using these macro features.
+
+  All user settings of gigedit are now persistently saved and automatically
+  restored. This also includes gigedit's windows' dimensions and positions.
+
+  Multi-row selection has been added to all list views now, so you can now
+  more efficiently apply actions to multiple samples, instruments or scripts
+  simultaneously at once, instead of requesting those actions for each item
+  individually.
+
+  Also modifying key features of several dimension region zones
+  simultaneously is now supported. That means you can now delete, split and
+  resize multiple dimension region zones at once.
+
+  You will also note that there are now icons displayed on the individual
+  regions and dimension region zones. Those icons visualize common key
+  features of regions and dimension region zones. For example if you forgot
+  to assign any sample to one of them, then you will see a red dot on the
+  respective region or dimension region zone. Another icon type is showing
+  you whether a region or dimension region zone uses a sample loop. This way
+  you can immediately see and control the key features of all regions
+  and their dimension region zones, without requiring to browse through all
+  of them individually.
+
+  Various new keyboard shortcuts have been added so you can work more
+  efficiently on your sounds. For example you can now use Ctrl+Left and
+  Ctrl+Right to navigate through all regions of the currently selected
+  instrument, and likewise you can use Alt+Left, Alt+Right, Alt+Up and
+  Alt+Down to navigate through all dimension region zones of the currently
+  selected region. Since there are many actions that can be either applied
+  on instrument level, or on region level, or on dimension region level, as
+  a general rule, for all keyboard shortcuts the Alt key is used by gigedit
+  for actions on dimension region level, whereas the Ctrl key is used on
+  region level and the Shift key is used for actions on instrument level.
+  So as another example you may copy all parameters of the currently
+  selected dimension region zone by hitting Alt+C, then you might select
+  another dimension region zone, or another instrument and then use Alt+V
+  to apply the parameters from the clipboard. While the parameters are
+  (as macro actually) on the clipboard you can also review, edit and
+  delete the individual parameters before applying them. As a final
+  example for new important shortcuts you may now use Shift+Up and
+  Shift+Down for switching between instruments.
+
+  Also the Combine Tool has been improved. You can now simply select the
+  (multiple) instruments you want to combine directly from the applications
+  main window, i.e. by Ctrl or Shift clicking them from the instruments
+  list view, and then right click to call the combine tool on that
+  selection. The Combine Tool now also shows you as preview the order in
+  which the selected instruments are going to be combined. This is
+  especially useful when combining instruments with certain dimension
+  types where the order matters for the actual resulting sound; for example
+  when using the velocity dimension. Simply use drag n drop to reorder
+  the previously selected instruments before combining.
+
+  Since LinuxSampler 2.1.0 added a Giga format extension which allows to
+  control the envelope generators' state machines more precisely; new
+  options have been added to gigedit to control these new EG features.
+  For example there are new check box which you can use to define for
+  each envelope whether the individual EG stages should still be completed
+  or rather aborted if a note-off was received. These new EG settings matter
+  a lot for certain instrument types like percussive instruments.
+
+  And last but not least a filter option field had been added to the
+  instruments list and samples list, which allows you to find specific
+  samples and instruments very quickly by typing search key words, which is
+  especially very helpful in case you are working on gig files which contain
+  a very large amount of samples or instruments in a single gig file.
+
+Version 1.0.0 (2015-07-17)
+
+  With this release we added support for new GigaStudio 4 features, for
+  example there are now dialogs for editing some of the new so called
+  "iMIDI rules". These can be used i.e. to trigger notes by MIDI CC and to
+  define a set of legato samples. You may have heard that the GigaStudio
+  software has seen its last version with GigaStudio 4. Tascam officially
+  discontinued this product, its intellectual property has been sold several
+  times among companies and there is currently no way to buy a new copy of
+  GigaStudio anymore. However the GigaStudio format is still under active
+  development with gigedit and LinuxSampler. For the first time ever we added
+  our own extensions to the Giga format: one of it is major new feature
+  called "real-time instrument scripts", which allows to bundle small programs
+  with your .gig sounds, which extend the sampler with custom behavior for
+  specific sounds. You may know such kind of instrument scripts from
+  commercial software samplers. Find out more about this new feature on
+  http://doc.linuxsampler.org/Instrument_Scripts/. Another rather minor
+  extension to the Giga format is support for various other MIDI CCs which
+  were never supported by GigaStudio before. So you can now use any MIDI CC
+  for EG1 controller, EG2 controller and attenuation controller. Obviously all
+  those extensions will not work with any GigaStudio version, they only work
+  with a recent version of Gigedit and LinuxSampler. Gigedit will inform you
+  whenever you are using such kind of custom Giga format extension, so that you
+  are always aware in case your changes are not cross/backward compatible with
+  the GigaStudio software. A load of enhancements have been added to Gigedit
+  in the last six years: Until now you were only able to edit either exactly
+  one dimension region or all dimension regions simultaneously. With this
+  release you may now hold the Ctrl button and select a specific set of
+  dimension region zones in the dimension region selector area (on the very
+  bottom of the Gigedit window) with your mouse. All synthesis parameters you
+  then change, will all be applied to that precise set of dimension region
+  zones. Also managing dimensions have been improved: previously to change the
+  amount of zones of a dimension you had to delete and recreate the dimension.
+  Which was not just inconvenient, but you also had to redefine your synthesis
+  parameters from scratch. Now you can just open the dimension manager dialog
+  and increase or decrease the amount of zones of a dimension with few clicks.
+  Same applies to the dimension type: you may now simply open the dimension
+  manager dialog and alter the type of a dimension with few clicks.
+  When working on complex Giga sounds you certainly noticed that one could
+  easily get confused about which samples are exactly used by which instrument
+  or even whether a sample is actually used at all by any instrument or just
+  left orphaned and wasting disk space. This was also due to the fact that the
+  Giga format does not require unique names for samples. We have worked on
+  resolving this usability issue. In the sample list view you can now read the
+  amount of times a sample is referenced by instruments of your .gig file. If a
+  sample is not used at all, then it will be shown in striking red color in
+  the sample list view. You may also right click on a sample and select
+  "Show references...", a new window appears on your screen which will show you
+  where exactly that particular sample is used by, that is which by which
+  instruments and by which regions of those instruments. Also the other way
+  around has been addressed: when you now edit the synthesis parameters of a
+  particular dimension region, you may now click on the new "<- Select Sample"
+  button and Gigedit automatically selects and displays the respective sample
+  in the samples list view, which you may then might rename to some more
+  appropriate sample name, or you might check by which other instrument(s) that
+  sample is used by, etc. You may now also remove the current sample reference
+  from individual dimension regions (assigning a so called "NULL" sample) by
+  clicking on the new "X" button next the sample reference field on the
+  "Sample" tab of a dimension region; this allows you to define "silent cases",
+  that is a case where no sample should be played at all, for example this is
+  often used for very low velocity ranges of i.e. between 0 and 6. If you are
+  working on .gig files with a large amount of Instruments, then you might also
+  be glad to know that you can finally also re-order the instruments of a file
+  by simply dragging the instruments around in the instruments list view.
+  Another handy new feature for sound designers is the new "Combine" tool,
+  which you can reach from the main menu. It allows you to select two ore more
+  instruments (by holding down the Ctrl key while selecting with mouse click)
+  from your currently open Giga file and combine those selected instruments to
+  a new instrument. This way you may for example create stunning layered
+  sounds, or you may create velocity splits, crossfade sounds by MIDI
+  controller and much more, all with just a few clicks. This may sound like a
+  trivial task, but if you have worked on this before, you certainly noticed
+  that this was often a very time consuming and error prone task before,
+  especially with complex individual sounds which had custom region ranges,
+  custom velocity splits and much more exotic stuff to take care of. The
+  combine tool handles all such cases for you automatically.
+  Last but not least, the interaction of Gigedit with LinuxSampler (in so
+  called "live mode") had been improved: When you click on the "Edit" button of
+  a channel strip in QSampler or Fantasia, Gigedit will be launched with the
+  respective instrument automatically being selected. Vice versa you may now
+  also just select another instrument with Gigedit's instrument list view and
+  LinuxSampler will automatically load and play that instrument on the
+  respective sampler part for you. So no more need to switch between the
+  Gigedit window and QSampler/Fantasia window all the time while working on
+  your sounds.
+
+Version 0.2.0 (2009-07-31)
+
+  When gigedit is running as a plugin in LinuxSampler the gigedit
+  keyboard may now be used to trigger notes. The settings in the file
+  properties window are now editable. A new function for replacing all
+  samples is added. Otherwise this is mostly a bug fix release, and
+  upgrading gigedit and libgig is strongly recommended, as previous
+  versions had bugs that may cause edited gig files to be corrupted.
+
+Version 0.1.1 (2007-12-06)
+
+  Parameter edits can now be applied to multiple regions and dimension
+  regions simultaneously - three checkboxes were added that select if
+  changes apply to all regions and/or all dimension regions.
+
+Version 0.1.0 (2007-10-15)
+
+  Many fixes have been made to make sure that the gig files created by
+  gigedit are working properly in LinuxSampler and GigaStudio. Gigedit
+  can now be run as a LinuxSampler plugin, allowing live editing of
+  loaded instruments. Sample loop parameters and instrument global
+  properties can now be edited. 24 bit samples can be imported. A
+  quick-start document has been added. Lots of other minor fixes and
+  improvements have been done.
+
+Version 0.0.3 (2007-03-24)
+
+  First version of gigedit. The program is renamed from gigview to
+  gigedit as it is now an editor, not just a viewer. Basic support for
+  both editing existing gig files and creating new ones from scratch
+  is provided.
+
+Version 0.0.2 (2006-11-05)
+
+  Quick fix for a thread initialization problem.
+
+Version 0.0.1 (2006-11-05)
+
+  First version of gigview.

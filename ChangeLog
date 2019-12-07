@@ -1,0 +1,477 @@
+Version SVN trunk (?)
+
+  * Script Editor: Added syntax highlighting support for standard measurement
+    units (and their potential metric prefix).
+  * Require C++11 compliant compiler.
+  * Draw LFO curves according to settings for each one of the 3 LFOs.
+  * Added 2 new tabs (a 3rd tab for "Amp" and a 3rd tab for "Filter").
+  * Shortened "Amplitude" -> "Amp" on tabs (to save space).
+  * Increased default window width 865px -> 960px.
+  * Script Editor: Show warning message in status line if Gigedit was compiled
+    without liblinuxsampler support (to make user aware about limited features).
+  * GIG SOUND FORMAT EXTENSION: Added combo box for selecting a wave form type
+    for each one of the 3 LFOs (i.e. for overriding the default LFO sine wave
+    form to either triangle, saw or square instead).
+  * GIG SOUND FORMAT EXTENSION: Added slider for each one of the 3 LFOs for
+    altering the phase displacement of the respective LFO (that is for moving
+    the LFO's start level horizontally on the time axis).
+  * GIG SOUND FORMAT EXTENSION: Added checkbox "Flip Phase" to LFO 3
+    (the original Gigasampler/GigaStudio software only supported that option
+    for LFO 1 and LFO 2).
+  * Increased crossfade curve preview dimensions
+    (280px X 80px -> 500px X 100px).
+  * Fixed LFO curve previews not being redrawn on UI control changes with
+    certain window managers and/or Gtk versions (patch by Ivan Maguidhir).
+  * Instrument Property dialog is now tabbed, showing (already existing)
+    instrument settings on tab 1, and showing now DLS meta info on 2nd tab.
+  * Refactored PropDialog -> FilePropDialog.
+  * Implemented sample property dialog.
+  * Gain: Allow also any positive dB gain value (instead of only +6 dB) up to
+    +96 dB and dropped the old "Gain +6dB" checkbox for that reason.
+  * Instrument Properties Dialog: Allow -96 dB .. +96 dB and dropped "Gain +6dB"
+    checkbox there as well.
+  * Instrument Properties Dialog: Show unit for attenuation and pitchbend range.
+
+Version 1.1.1 (2019-07-27)
+
+  * Script Editor: Fixed some minor issues with vertical line number bar
+    (which was editable, selectable and incorrectly displayed on new scripts).
+  * Translation Fix: MacroEditor.cpp and MacrosSetup.cpp were not under
+    translation control.
+  * Spelling fixes (patch provided by Debian maintainer Jaromír Mikeš).
+  * Added new main menu item "View" -> "Tooltips for Beginners" which allows
+    to disable tooltips intended for newbies only (default: on).
+  * Extended support for keyboard function keys up to F19.
+  * List assigned scripts as colored tooltip when hovering mouse over the
+    "Scripts" column in the instruments list.
+  * Added global keyboard accelerator Shift + Backspace for dropping all script
+    slots from an instrument.
+  * Added option to save as gig v4 file (File -> Properties).
+  * Fixed duplicate items in File -> Properties -> "File Format" combo box.
+  * GIG SOUND FORMAT EXTENSION: Added combo box "Sustain Release Trigger" which
+    can be used to optionally play release trigger samples on sustain pedal up.
+  * GIG SOUND FORMAT EXTENSION: Added check box "No note-off release trigger"
+    which allows to disable release trigger samples on regular MIDI note-off.
+  * Fixed compiler errors with Gtk 3.24.x (patch by Miroslav Šulc).
+  * Fixed some compiler warnings
+  * Avoid non-standard offsetof usage (to get rid of gcc warnings)
+  * Use GDK Seat API if available to grab pointer
+  * Improve version checks for pangomm
+  * Fix the instrument list tooltip handling so it doesn't generate
+    GTK assertion error messages
+  * Use English quotation marks in tooltips instead of German
+  * Use multiple columns in controller value popups, as tall popup
+    menus work really badly in some GTK environments
+  * Avoid deprecated sigc++ usage
+  * Fix build on old linux environments
+  * Enable "silent rules" in build
+  * Fix memory read access bug
+  * Refactor code: add common base class for Loader and Saver
+  * Fix resource leak: join loader and saver threads after use
+  * Use std::thread when building with newer glibmm, as Glib::Thread is
+    deprecated
+  * Fix bug that left the main window in a greyed out state after
+    opening a small gig file
+  * Set gtk settings a bit later to prevent warnings
+  * Use standard name for gdk pixbuf module file on Mac
+  * Look for locale files under directory share on Mac
+  * Support bundled gtk3 on Mac
+
+Version 1.1.0 (2017-11-25)
+
+  * allow building with G/GDK/GTK_DISABLE_DEPRECATED
+  * fixed building without linuxsampler on Mac
+  * fixed some compiler and cppcheck warnings
+  * synthesis paremeter page tabs are now scrollable (fixes an issue with
+    GTK 3: default theme uses huge tabs which breaks the overall layout on
+    average window sizes)
+  * Automake: set environment variable GCC_COLORS=auto to allow GCC to
+    auto detect whether it (sh/c)ould output its messages in color.
+  * NKSP Editor: Added support for liblinuxsampler's NKSP syntax
+    highlighting backend.
+  * Script Editor: Some color tweaks (using now same text colors as on
+    the NKSP refrence documentation website).
+  * Script Editor: Added support for liblinuxsampler's NKSP parser
+    backend for displaying parser errors and warnings directly within
+    the source code.
+  * User settings are now automatically saved and restored.
+  * Automatically save & restore window size and position.
+  * Script Editor: Show precise parser error/warning messages as tooltip
+    when the mouse points over the respective location in the script's
+    source code.
+  * Script Editor: Show a question dialog to the user when the editor is
+    to be closed and the script changes have not been applied yet.
+  * Script Editor: Added status bar at the bottom of the script editor
+    window showing the amount (if any) of errors and warnings.
+  * Script Editor: Added menu bar and two initial entries: "Apply" (Ctrl-S)
+    and "Close" (Ctrl-Q).
+  * Script Editor: if editor is used in live-mode, inform the sampler that
+    it needs to automatically reload the script after the script has been
+    altered and applied with the script editor.
+  * Added setting to main menu "View" -> "Auto Restore Window Dimension"
+    (disabled by default since it causes issues on some machines).
+  * Fixed crash after changing a dimension type with the dimension manager
+    dialog.
+  * Script Editor: Fixed editor which did not appear on some systems due
+    to missing icons (using now lists of alternative icon names).
+  * Script Editor: Added "Font Size ..." selection to editor's menu.
+  * Script Editor: Fixed crash on Ctrl + A, followed by Del.
+  * fixed crash when opening dimension manager dialolg multiple times
+    (and i.e. adding or removing dimensions each time)
+  * Show sample group name and CRC-32 checksum on "Sample" tab.
+  * Show instrument index number on instruments list view.
+  * Added multi-row selection support on samples tree view.
+  * Added multi-row selection support on instruments list view.
+  * windows, 32-bit: fixed crashes by making sure the stack in sub
+    threads is 16-byte aligned
+  * windows: look for the data directory in the parent of the dll
+    directory, if the dll directory is called "32" or "64"
+  * Implemented resizing multiple dimension region zones at once, which is
+    controlled by the infamous checkbox trio "all regions",
+    "all dimension splits" and "both channels".
+  * Implemented deleting dimension region zones of all regions at once, which
+    is controlled by checkbox "all regions".
+  * Implemented splitting up dimension region zones of all regions at once,
+    which is controlled by checkbox "all regions".
+  * Show graphical symbol on region that uses loop(s).
+  * Show graphical symbol on region that misses sample reference(s).
+  * Fixed crash on saving file if a sample was requested to be replaced twice
+    by the user.
+  * Implemented fast navigation through regions by keyboard accelerator
+    Ctrl+Left and Ctrl+Right (on Mac: Cmd+Left and Cmd+Right).
+  * Implemented fast navigation through dimension region zones of currently
+    selected region by keyboard accelerator Alt+Left, Alt+Right, Alt+Up,
+    Alt+Down, as well as simply using the arrow keys alone if the dimension
+    region chooser got focus (i.e. when it was selected by mouse previously).
+  * Color tweaking on selected regions and selected dimension zones.
+  * Dimension Region Chooser: Show main selected case in opaque blue color
+    (like before), but all other selected dimension zones with a blue hatched
+    pattern instead.
+  * Dimension Region Chooser: Show the label of the currently selected
+    dimension in bold font.
+  * Implemented selecting multiple dimension region zones by keyboard with
+    keyboard accelerators Alt+Shift+Left and Alt+Shift+Right.
+  * Implemented copy & paste of DimensionRegion (with Alt+c and Alt+v).
+  * Dimension Region Chooser: Mark all zones auto selected by check box trio
+    with gray hatched pattern.
+  * Region Chooser: Mark all regions which are auto selected by check box
+    "All Regions" with gray hatched pattern.
+  * Introduced "Macro Editor" for adjusting clipboard content before applying
+    it (accessible via Alt+x).
+  * Introduced configurable list of macros which are auto assigned to keyboard
+    accelerators (F1 ... F12) and saved along with the app's config file.
+  * Macro Editor: Fixed deleting rows when delete button was hit without Ctrl
+    being pressed.
+  * Macro Editor: Show combo box with textual options for enum types.
+  * "Macro" main menu section: show macro comments as tooltip.
+  * Macro Editor: Display demangled C++ type names.
+  * Macros Setup: Implemented cloning of macros.
+  * Live mode performance optimization: fixed the editor to be non-responsive
+    for a very long time, which happened if changing instrument parameters of a
+    very large amount of dimension regions was requested.
+  * Macro Editor: Handle boolean parameter types appropriately, i.e. show
+    'Yes' or 'NO' instead of '1' or '0'.
+  * GTK3: Bringing back icons and keyboard accelerators / mnemonics for menus
+    and buttons with GTK3; Cudos to those GTK heros who thought it might be
+    a clever idea to simply remove such features for all users, all devices
+    and all apps by default with GTK3!
+  * Autoconf: check for presence of at least gtk+-2.0-dev.
+  * Instruments list view: show amount of real-time instruments scripts used
+    by instrument.
+  * Script Editor: Fixed Gtk crash while entering a variety of ill formed code
+    like unterminated string literals.
+  * Assigned more useful default dimensions (and default position) for various
+    windows and dialogs (if auto-restore of user's own custom window
+    dimensions is disabled).
+  * Mac fix: Make sure app window appears in front of all other apps.
+  * Script Editor: only if compiled without liblinuxsampler; added support for
+    new NKSP language keyword "synchronized".
+  * Script Editor: strike through code blocks filtered out by the preprocessor.
+  * Combine Tool: Show instruments' index number in the list view.
+  * Combine Tool: Now it allows to select the instruments to be combined
+    already in the main window's instruments list view; then either call the
+    combine instrument dialog from the main menu or use the new keyboard
+    shortcut Ctrl + j.
+  * Combine Tool: Added a vertical list which represents the order of the
+    selected instruments to be combined; dragging them modifies their order.
+  * Combine Tool: After returning from the combine tool dialog, automatically
+    scroll to the newly added (combined) instrument.
+  * Draw icons on individual dimension region zones, similar to the icons
+    already been drawn on regions.
+  * Fixed loop and sample reference icons being displayed incorrectly sometimes,
+    because unused dimension regions were not ignored.
+  * Script Editor: Show line numbers.
+  * Script Editor: Right aligned line numbers.
+  * Script Editor: Fixed font readability issue on Mac.
+  * Added EG state machine options for EG1 and EG2, which may be used to
+    configure whether the individual EG stages may be cancelled.
+  * Fix: after the combine instruments dialog, the new instrument was not
+    correctly displayed by the GUI as being selected.
+  * Fix: automatically reload instrument after script slots have been modified.
+  * Combine Tool: OK button has focus now by default to quickly combine
+    instruments by pressing Return key.
+  * Added keyboard accelerators Shift+F1 to Shift+F12 for quick assigning
+    a script to the currently selected instrument, and an appropriate
+    additional menu "Instruments" -> "Assign Script".
+  * Added keyboard accelerators Ctrl + Arrow Down and Ctrl + Arrow Up for
+    switching between instruments.
+  * Added search filter field which allows to quickly filter the instrument
+    list by case insensitive search tokens.
+  * Fix: navigating between dimension zones by keyboard did sometimes not
+    work after switching from an instrument with different dimension types.
+  * Fix: Sample references view dialog had some odd behaviors, like it did not
+    respond to mouse scroll events for instance.
+  * Debian: Raised Debian compatibility level to Debian 9 "Stretch".
+  * Raised max. pitchbend range to 48 semi tones.
+  * Added experimental support for upcoming GTK(MM)4
+    (for now up to GTKMM 3.91.2 while still preserving backward compatibility
+    down to GTKMM 2).
+  * Re-merged r2845 to compile now with and without Gtk "Stock ID" API
+    (see also r3158).
+  * Visual cosmetics on Gtk 3.
+  * Script Editor: Use consistent font size on all screens and DPI settings.
+
+Version 1.0.0 (2015-07-17)
+
+  * minor fix in configure for cross-compiling
+  * minor Makefile fix for parallel make
+  * use Cairo instead of deprecated gdk drawing primitives
+  * avoid deprecated gtk methods when using newer gtk versions
+  * raised minimum supported gtkmm version to 2.8
+  * ported to gtkmm 3, keeping compatibility with gtkmm 2
+  * gtkmm 3 fix: rewrote the custom widgets (regionchooser and
+    dimregionchooser) so they only draw pixels in the on_draw
+    method. This should make them work again in newer gtkmm 3
+    environments.
+  * added support for new glibmm threads API
+  * gtkmm 3 fix: the WrapLabel custom widget is not needed in gtkmm 3
+  * fixed building on Debian testing (#186)
+  * modernized configure script
+  * added graphical curves for velocity response and crossfade
+  * added "Duplicate Instrument" function
+  * fixed import of 32 bit float wav files
+  * code refactoring: created a PropEdit class for property editor
+    windows, moved Table class from mainwindow to paramedit
+  * minor gui tweaks: made note entry fields a bit wider, set a
+    minimum width for scales
+  * bug fix: avoid stale information in the instrument properties
+    window when a new file is loaded or the instrument is removed
+  * cross fade graph: draw curves of all layers in the same graph
+  * made sure the instruments menu is updated when instruments are
+    added, removed or renamed
+  * fixed name entry field in instrument properties window
+  * use character encoding Windows-1252 for all strings in gig files
+  * show dimension zone start and end as numeric text labels
+  * copying sample informations automatically may now be disabled from the
+    new "Edit" main menu
+  * import 'fine tune' when importing samples with libsndfile
+  * Mac OS X: initialize gtk and gettext with files from base
+    directory of the libgigedit library
+  * Mac OS X: fixed "recently used" in file dialogs
+  * Mac OS X: avoid crash when starting gigedit as an application
+    bundle
+  * Mac OS X: try to launch the GUI on the process's "main" thread
+  * show build date and libgig version number in about dialog
+  * added dialog for editing the CtrlTrigger and Legato midi rules
+  * if there is no region yet, show a red hint text to the user that he may
+    right click on the region chooser area to add a region
+  * added tooltips to main menu entries (was buggy before)
+  * added tooltips to instruments tree view and samples tree view
+  * added various tooltips and adjusted some labels on the region settings
+    pane
+  * GIG SOUND FORMAT EXTENSION: only a small set of possible MIDI controllers
+    was selectable for EG1 controller, EG2 controller and attenuation
+    controller (and no CC number was shown in the combo box). Obviously the
+    additional MIDI controllers can only be used with LinuxSampler, they would
+    not work with Gigasampler/GigaStudio. A warning message will be shown
+    though whenever somebody tries to use one of those extension controllers.
+  * Combine instruments: a new feature that allows to merge a selection of
+    instruments to one new single instrument. It uses the 'layer' dimension
+    to stack up the instruments. This feature is available from the main menu
+    under 'Tools' -> 'Combine Instruments'.
+  * Dimension zone amount: Support for increasing and decreasing the amount of
+    dimension zones by right clicking on the respective zone and either
+    selecting "delete" or "split" in the popup menu.
+  * Combine instruments: generalized this tool to allow combining instruments
+    based on any dimension, not only the 'layer' dimension.
+  * 'Dimension Manager' dialog: show dialog window with at least 460x300px on
+    initial usage (was far too small by default).
+  * File Property Dialog: allow viewing and altering the Giga file format
+    version (by combo box).
+  * 'Dimension Manager' dialog: added support for viewing and editing
+    dimensions of all regions simultaniously.
+  * GIG SOUND FORMAT EXTENSION: Added support for managing and editing
+    real-time instrument scripts. Instrument scripts are a LinuxSampler
+    extension of the original Giga format and will not load with the
+    GigaStudio software.
+  * GIG SOUND FORMAT EXTENSION: Added support for managing script slots for
+    instruments. Script slots define which scripts shall be executed for an
+    instrument by the sampler and in which order.
+  * Samples tree view on main window: display the amount of references for
+    each sample and show the respective sample in gray color in case it is not
+    referenced at all.
+  * Samples tree view: implemented sample reference browser, which shows a
+    tree with all instruments and their respective regions which reference the
+    selected sample once ore more.
+  * Restructured main menu: duplicated all popup menus to the main menu,
+    automatically switch to the right tree view tab when either selecting the
+    "Sample", "Instrument" or "Script" main menu entry.
+  * Dimension Region Selector: implemented multi zone selection by press and
+    hold CTRL key.
+  * Dimension Region Selector: show bottom and upper limit values for all
+    dimension zones, not just the currently selected ones.
+  * Dimension Region Selector: Fixed drawing issues when zone sizes were
+    altered by mouse drag and labels being displayed at wrong positions.
+  * Region Chooser: Double click opens dimension manager dialog.
+  * Dimension Manager: Clicking on dimension type cell of an existing dimension
+    opens a popup to alter the dimension type.
+  * Script Tree: Double click opens script editor.
+  * Fixed potential crash if exception was thrown while opening a gig file.
+  * Added support for visual progress bar while saving a gig file.
+  * Automatically switch the sampler's (audible) instrument whenever another
+    instrument was selected in gigedit (this default behavior can be switched
+    off in the settings menu of gigedit).
+  * Dimension Region Editor: Show coarse sample format info (audio channels,
+    bit depth, sample rate) and unique sample ID (since the gig format allows
+    different samples to have the same name).
+  * Dimension Region Editor: Added button "Select Sample" on the sample tab,
+    which allows to conveniently select the dimension region's sample on the
+    left hand side's samples tree view.
+  * Sample Referenve View Dialog: Clicking on a reference in the list closes
+    the dialog and jumps directly to the respective instrument, region and
+    dimension region the respective sample reference is located at.
+  * Fixed instruments, samples and scripts to appear twice after save.
+  * Implemented reordering of instruments by drag & drop.
+  * Implemented replacing of existing samples.
+  * Added "X" button next to sample reference field, which allows to remove
+    the current sample reference, allowing to create a "silent case" where
+    no sample shall be played.
+  * Fixed file name disappearing from title bar on certain actions.
+  * Added new menu item "View"->"Refresh All".
+  * Added new menu item "Samples"->"Remove Unused Samples".
+  * Region Chooser: when moving a region around automatically move the
+    keyboard position dependent pitch accordingly (can be turned off with
+    "Settings"->"Move root key with region moved").
+  * Added option to main menu for performing "Save" operation with a
+    tempoary file (may perform faster than directly modifying existing
+    .gig file).
+
+Version 0.2.0 (2009-07-31)
+
+  * fixed file properties dialog - properties now can be edited
+  * gig files where regions are not internally ordered are now handled
+  * the resize mouse pointer is not shown anymore for regions that
+    can't be resized
+  * the region and dimregion chooser widgets are now resizable
+  * bugfix: sometimes you could not delete more than one dimension
+  * filter headers are now also greyed out when the filter is inactive
+  * autoconf fix: LS plugin dirs with digits in their prefix
+    (e.g. "/usr/lib64/foo") are now resolved in relative dirs as well
+    (show a warning when resolving the relative path failed)
+  * keys on the virtual keyboard now highlight on note on events on
+    sampler side
+  * virtual keyboard can now trigger notes for the sampler (only in
+    live-mode of course)
+  * implemented alternative behavior for the virtual MIDI keyboard
+    (selectable by combobox below the keyboard)
+  * show absolute velocity value of note-on & note-off events below
+    the virtual MIDI keyboard
+  * renamed misleading names regarding the gig format's "keyswitching"
+    feature (the dimension is now displayed as "keyswitching" instead of
+    "keyboard" in the dimregchooser widget and the two parameters for
+    defining the actual keyswitching area on the keyboard in the instruments
+    properties dialog are now called "Keyswitching range low/high" instead of
+    "Dimension key range low/high")
+  * added "replace all samples" function to samples popup menu
+    (patch by Anders Dahnielson, a bit extended, fixes #73)
+  * bugfix: dimension manager window didn't update when another region
+    was selected (#78)
+  * in "Save As..." dialog set inital filename to "copy_of_<filename>" and
+    show a warning message that saving to the same .gig file will corrupt
+    the sample wave data
+  * fixed compilation with gcc 4.3
+  * the "Add Samples" dialog now remembers current directory (patch by
+    Devin Anderson, fixes #81)
+  * it is now possible to create dimensions where the amount of zones
+    isn't a power of two (patch by Devin Anderson, #89, slightly
+    modified)
+  * fixed configure check for libsndfile loop support
+  * bugfix: when a stereo sample is replaced, make sure both zones of
+    the sample channel dimension get updated with the new sample
+  * minor gui fix: made multi line lables expand to use full width
+  * fixes for building the plugin with MinGW
+  * added rpm packaging file
+    (patch by Devin Anderson, slightly modified, fixes #88)
+  * made all visible strings translatable
+  * bugfix: inform the sampler when new file(s) has been imported on save
+    operation (#82)
+  * updated LinuxSampler plugin of gigedit to the latest liblinuxsampler
+    C++ API changes
+  * Windows: look for translations using base directory of libgigedit
+    dll
+  * virtual keyboard fixes: restore to grey when outside keyboard.
+    Don't trigger multiple notes for each key when moving mouse.
+
+Version 0.1.1 (2007-12-06)
+
+  * multiple editor windows can now be opened by the plugin
+  * bugfix: gigedit didn't start on windows 2000
+  * standard gtk command line parameters is now handled
+  * parameter edits can now be applied to multiple regions and
+    dimension regions simultaneously - three checkboxes were added
+    that select if changes apply to all regions and/or all dimension
+    regions
+
+Version 0.1.0 (2007-10-15)
+
+  * fixed compilation with older gcc versions
+  * added German translation
+  * reworked instrument properties dialog - properties can now be
+    edited
+  * restructured dimension region editor for elements to be in a more
+    logical and intuitive order
+  * added Makefile.cvs (just for standard compliance with other projects)
+  * added Debian packaging infrastructure
+  * implemented sample loop editing
+  * improved labels in dimension region editor
+  * use normal layout for checkboxes
+  * allow to resize dimension zones even when the respective dimension has
+    no custom dimension splits yet
+  * moved instrument editor into a shared library 'libgigedit', the 'gigedit'
+    binary is now just calling that shared library
+  * implemented an "instrument editor plugin" for LinuxSampler to allow
+    on-the-fly instrument editing within the sampler's own process
+    (revised directories to a more automake-friendly structure for this, to
+    avoid compilation and install errors)
+  * added experimental support to synchronize gigedit with LinuxSampler to
+    avoid race conditions / crash while modifying data structures
+  * added quick start documentation by Alexander Methke
+  * a changed file is now marked with an asterisk in the window title
+  * added close confirmation dialog, shown if file is changed
+  * "save" means "save as" for new files
+  * enabled acceleration keys
+  * add .gig to filename in "save as" if it's not already there
+  * filename character encodings other than utf-8 supported
+  * regions can now be moved, not just resized
+  * improved labels in instrument properties dialog
+  * remove file extensions from file names when importing samples
+  * added digits for octave numbers on the keyboard and made keys
+    outside piano range grey
+  * added support for 24 bit sample import
+  * when importing samples, settings for loops and root note are
+    copied from the sample files (if they have such settings)
+  * start with a new gig file by default
+  * make sure samplechannel dimension gets created for stereo samples
+  * allow building with older versions of gtk and libsndfile
+  * remember selected dimension when switching regions
+  * check if file is savable before trying to save
+  * gettext is now an optional dependency
+  * added Dev-C++ project files for Windows systems
+  * added status bar to the bottom of main window (independent area on the
+    right shows whether gigedit is running stand-alone or attached to
+    LinuxSampler)
+  * fixed crash when gigedit was compiled with CXXFLAGS="-g"
+
+Version 0.0.3 (2007-03-24)
+
+  * first release of gigedit
