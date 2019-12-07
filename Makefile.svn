@@ -34,7 +34,7 @@ configure: check_dependencies configure.ac Makefile.am \
 	@autoconf
 	######################################################################
 	# If you are compiling gigedit from SVN, make sure to use the latest #
-	# version of libgig from CVS as well !                               #
+	# version of libgig from SVN as well !                               #
 	######################################################################
 
 .PHONY: clean
