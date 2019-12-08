@@ -861,14 +861,39 @@ DimRegionEdit::DimRegionEdit() :
     addHeader(_("General Filter Settings"));
     addProp(eVCFEnabled);
     {
-        const char* choices[] = { _("lowpass"), _("lowpassturbo"), _("bandpass"),
-                                  _("highpass"), _("bandreject"), 0 };
+        const char* choices[] = {
+            _("lowpass"), _("lowpassturbo"), _("bandpass"), _("highpass"),
+            _("bandreject"),
+            _("lowpass 1-pole [EXT]"),
+            _("lowpass 2-pole [EXT]"),
+            _("lowpass 4-pole [EXT]"),
+            _("lowpass 6-pole [EXT]"),
+            _("highpass 1-pole [EXT]"),
+            _("highpass 2-pole [EXT]"),
+            _("highpass 4-pole [EXT]"),
+            _("highpass 6-pole [EXT]"),
+            _("bandpass 2-pole [EXT]"),
+            _("bandreject 2-pole [EXT]"),
+            NULL
+        };
         static const gig::vcf_type_t values[] = {
+            // GigaStudio original filter types
             gig::vcf_type_lowpass,
             gig::vcf_type_lowpassturbo,
             gig::vcf_type_bandpass,
             gig::vcf_type_highpass,
-            gig::vcf_type_bandreject
+            gig::vcf_type_bandreject,
+            // LinuxSampler filter types (as gig format extension)
+            gig::vcf_type_lowpass_1p,
+            gig::vcf_type_lowpass_2p,
+            gig::vcf_type_lowpass_4p,
+            gig::vcf_type_lowpass_6p,
+            gig::vcf_type_highpass_1p,
+            gig::vcf_type_highpass_2p,
+            gig::vcf_type_highpass_4p,
+            gig::vcf_type_highpass_6p,
+            gig::vcf_type_bandpass_2p,
+            gig::vcf_type_bandreject_2p,
         };
         eVCFType.set_choices(choices, values);
     }
