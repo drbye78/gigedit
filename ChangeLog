@@ -34,6 +34,8 @@ Version SVN trunk (?)
   * GIG SOUND FORMAT EXTENSION: Support for additional filter types:
     lowpass 1/2/4/6-pole, highpass 1/2/4/6-pole, bandpass 2-pole,
     bandreject 2-pole.
+  * Combine Tool: Fixed user's selection set reduction not being reflected
+    correctly as it supposed to.
 
 Version 1.1.1 (2019-07-27)
 

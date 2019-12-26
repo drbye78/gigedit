@@ -1192,7 +1192,7 @@ void CombineInstrumentsDialog::onSelectionChanged() {
     {
         Children allOrdered = m_refOrderModel->children();
         for (Children::iterator itOrder = allOrdered.begin();
-             itOrder != allOrdered.end(); ++itOrder)
+             itOrder != allOrdered.end(); )
         {
             Gtk::TreeModel::Row rowOrder = *itOrder;
             gig::Instrument* instr = rowOrder[m_orderColumns.m_col_instr];
@@ -1204,9 +1204,11 @@ void CombineInstrumentsDialog::onSelectionChanged() {
             }
             goto removeOrderedItem;
         nextOrderedItem:
+            ++itOrder;
             continue;
         removeOrderedItem:
-            m_refOrderModel->erase(itOrder);
+            // postfix increment here to avoid iterator invalidation
+            m_refOrderModel->erase(itOrder++);
         }
     }
 
