@@ -36,6 +36,8 @@ Version SVN trunk (?)
     bandreject 2-pole.
   * Combine Tool: Fixed user's selection set reduction not being reflected
     correctly as it supposed to.
+  * Fix: dimregion edit actions were ignored if user did not click (ever) on
+    any dimension zone yet.
 
 Version 1.1.1 (2019-07-27)
 

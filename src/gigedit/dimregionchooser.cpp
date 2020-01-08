@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2019 Andreas Persson
+ * Copyright (C) 2006-2020 Andreas Persson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -823,8 +823,19 @@ void DimRegionChooser::get_dimregions(const gig::Region* region, bool stereo,
 
             std::map<gig::dimension_t, std::set<int> >::const_iterator itSelectedDimension =
                 this->dimzones.find(it->first);
-            if (itSelectedDimension != this->dimzones.end() &&
-                itSelectedDimension->second.count(it->second)) continue; // is selected
+            if (itSelectedDimension != this->dimzones.end()) {
+                if (itSelectedDimension->second.count(it->second))
+                    continue; // is selected
+                // special case: no selection of dimzone yet; assume zone 0
+                // being selected in this case
+                //
+                // (this is more or less a workaround for a bug, that is when
+                // no explicit dimregion case had been selected [ever] by user
+                // by clicking on some dimregionchooser zone yet, then the
+                // individual dimension entries of this->dimzones are empty)
+                if (itSelectedDimension->second.empty() && it->second == 0)
+                    continue; // is selected
+            }
 
             goto notSelected;
         }
