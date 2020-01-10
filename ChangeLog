@@ -38,6 +38,9 @@ Version SVN trunk (?)
     correctly as it supposed to.
   * Fix: dimregion edit actions were ignored if user did not click (ever) on
     any dimension zone yet.
+  * Added boolean setting to main menu -> "View" -> "Instrument Properties by
+    Double Click", which allows to prevent double clicking an instrument on the
+    instruments list view from opening its properties dialog.
 
 Version 1.1.1 (2019-07-27)
 

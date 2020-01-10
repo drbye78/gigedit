@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2019 Andreas Persson
+ * Copyright (C) 2006-2020 Andreas Persson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -451,6 +451,12 @@ MainWindow::MainWindow() :
         m_actionGroup->add_action_bool("Statusbar", sigc::mem_fun(*this, &MainWindow::on_action_view_status_bar), true);
     m_actionToggleRestoreWinDim =
         m_actionGroup->add_action_bool("AutoRestoreWinDim", sigc::mem_fun(*this, &MainWindow::on_auto_restore_win_dim), Settings::singleton()->autoRestoreWindowDimension);
+    m_actionInstrDoubleClickOpensProps =
+        m_actionGroup->add_action_bool(
+            "OpenInstrPropsByDoubleClick",
+            sigc::mem_fun(*this, &MainWindow::on_instr_double_click_opens_props),
+            Settings::singleton()->instrumentDoubleClickOpensProps
+        );
     m_actionToggleShowTooltips = m_actionGroup->add_action_bool(
         "ShowTooltips", sigc::mem_fun(*this, &MainWindow::on_action_show_tooltips),
         Settings::singleton()->showTooltips
@@ -476,6 +482,13 @@ MainWindow::MainWindow() :
     actionGroup->add(toggle_action,
                      sigc::mem_fun(
                          *this, &MainWindow::on_auto_restore_win_dim));
+
+    toggle_action =
+        Gtk::ToggleAction::create("OpenInstrPropsByDoubleClick", _("Instrument Properties by Double Click"));
+    toggle_action->set_active(Settings::singleton()->instrumentDoubleClickOpensProps);
+    actionGroup->add(toggle_action,
+                     sigc::mem_fun(
+                         *this, &MainWindow::on_instr_double_click_opens_props));
 
     toggle_action =
         Gtk::ToggleAction::create("ShowTooltips", _("Tooltips for Beginners"));
@@ -935,6 +948,10 @@ MainWindow::MainWindow() :
         "          <attribute name='label' translatable='yes'>Auto restore Window Dimensions</attribute>"
         "          <attribute name='action'>AppMenu.AutoRestoreWinDim</attribute>"
         "        </item>"
+        "        <item id='OpenInstrPropsByDoubleClick'>"
+        "          <attribute name='label' translatable='yes'>Instrument Properties by Double Click</attribute>"
+        "          <attribute name='action'>AppMenu.OpenInstrPropsByDoubleClick</attribute>"
+        "        </item>"
         "      </section>"
         "      <section>"
         "        <item id='RefreshAll'>"
@@ -1163,6 +1180,7 @@ MainWindow::MainWindow() :
         "      <menuitem action='Statusbar'/>"
         "      <menuitem action='ShowTooltips'/>"
         "      <menuitem action='AutoRestoreWinDim'/>"
+        "      <menuitem action='OpenInstrPropsByDoubleClick'/>"
         "      <separator/>"
         "      <menuitem action='RefreshAll'/>"
         "    </menu>"
@@ -1283,6 +1301,11 @@ MainWindow::MainWindow() :
         Gtk::MenuItem* item = dynamic_cast<Gtk::MenuItem*>(
             uiManager->get_widget("/MenuBar/MenuView/AutoRestoreWinDim"));
         item->set_tooltip_text(_("If checked, size and position of all windows will be saved and automatically restored next time."));
+    }
+    {
+        Gtk::MenuItem* item = dynamic_cast<Gtk::MenuItem*>(
+            uiManager->get_widget("/MenuBar/MenuView/OpenInstrPropsByDoubleClick"));
+        item->set_tooltip_text(_("If checked, double clicking an instrument opens its properties dialog."));
     }
     {
         Gtk::MenuItem* item = dynamic_cast<Gtk::MenuItem*>(
@@ -3764,6 +3787,25 @@ void MainWindow::on_auto_restore_win_dim() {
 #endif
 }
 
+void MainWindow::on_instr_double_click_opens_props() {
+#if USE_GLIB_ACTION
+    bool active = false;
+    m_actionInstrDoubleClickOpensProps->get_state(active);
+    // for some reason toggle state does not change automatically
+    active = !active;
+    m_actionInstrDoubleClickOpensProps->change_state(active);
+    Settings::singleton()->instrumentDoubleClickOpensProps = active;
+#else
+    Gtk::CheckMenuItem* item =
+        dynamic_cast<Gtk::CheckMenuItem*>(uiManager->get_widget("/MenuBar/MenuView/OpenInstrPropsByDoubleClick"));
+    if (!item) {
+        std::cerr << "/MenuBar/MenuView/OpenInstrPropsByDoubleClick == NULL\n";
+        return;
+    }
+    Settings::singleton()->instrumentDoubleClickOpensProps = item->get_active();
+#endif
+}
+
 void MainWindow::on_save_with_temporary_file() {
 #if USE_GLIB_ACTION
     bool active = false;
@@ -3838,7 +3880,8 @@ bool MainWindow::on_button_release(Gdk::EventButton& _button) {
 void MainWindow::on_button_release(GdkEventButton* button) {
 #endif
     if (button->type == GDK_2BUTTON_PRESS) {
-        show_instr_props();
+        if (Settings::singleton()->instrumentDoubleClickOpensProps)
+            show_instr_props();
     } else if (button->type == GDK_BUTTON_PRESS && button->button == 3) {
         // gig v2 files have no midi rules
         const bool bEnabled = !(file->pVersion && file->pVersion->major == 2);

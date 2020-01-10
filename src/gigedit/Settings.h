@@ -1,6 +1,6 @@
 /*
-    Copyright (c) 2014-2019 Christian Schoenebeck
-    
+    Copyright (c) 2014-2020 Christian Schoenebeck
+
     This file is part of "gigedit" and released under the terms of the
     GNU General Public License version 2.
 */
@@ -129,6 +129,7 @@ public:
     Property<bool> autoRestoreWindowDimension;
     Property<bool> saveWithTemporaryFile; ///< If enabled and the user selects "Save" from the main menu, then the file is first saved as separate temporary file and after the save operation completed the temporary file is moved over the original file.
     Property<bool> showTooltips; ///< Whether tooltips specifically intended for newbies should be displayed throughout the application (default: yes).
+    Property<bool> instrumentDoubleClickOpensProps; ///< If enabled then double clicking on an instrument of the instruments list view will show the selected instrument's properties dialog.
 
     // settings of "MainWindow" group
     Property<int> mainWindowX;

@@ -1,5 +1,5 @@
 /*                                                         -*- c++ -*-
- * Copyright (C) 2006 - 2019 Andreas Persson
+ * Copyright (C) 2006 - 2020 Andreas Persson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -352,6 +352,8 @@ protected:
     Glib::RefPtr<Gio::SimpleAction> m_actionEditScript;
     Glib::RefPtr<Gio::SimpleAction> m_actionRemoveScript;
 
+    Glib::RefPtr<Gio::SimpleAction> m_actionInstrDoubleClickOpensProps;
+
     Glib::RefPtr<Gio::SimpleAction> m_actionToggleCopySampleUnity;
     Glib::RefPtr<Gio::SimpleAction> m_actionToggleCopySampleTune;
     Glib::RefPtr<Gio::SimpleAction> m_actionToggleCopySampleLoop;
@@ -574,6 +576,7 @@ protected:
     void show_script_slots();
     void on_action_view_status_bar();
     void on_auto_restore_win_dim();
+    void on_instr_double_click_opens_props();
     void on_save_with_temporary_file();
     void on_action_refresh_all();
     void on_action_warn_user_on_extensions();
