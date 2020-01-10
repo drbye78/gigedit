@@ -41,6 +41,8 @@ Version SVN trunk (?)
   * Added boolean setting to main menu -> "View" -> "Instrument Properties by
     Double Click", which allows to prevent double clicking an instrument on the
     instruments list view from opening its properties dialog.
+  * Added "Move Instrument To ..." menu action (available as Ctrl + i shortcut)
+    which shows a small dialog for entering the instrument's new index.
 
 Version 1.1.1 (2019-07-27)
 

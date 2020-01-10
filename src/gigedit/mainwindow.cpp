@@ -522,6 +522,9 @@ MainWindow::MainWindow() :
         "DupInstrument", sigc::mem_fun(*this, &MainWindow::on_action_duplicate_instrument)
     );
     m_actionGroup->add_action(
+        "MoveInstrument", sigc::mem_fun(*this, &MainWindow::on_action_move_instr)
+    );
+    m_actionGroup->add_action(
         "CombInstruments", sigc::mem_fun(*this, &MainWindow::on_action_combine_instruments)
     );
     m_actionGroup->add_action(
@@ -541,6 +544,11 @@ MainWindow::MainWindow() :
     actionGroup->add(
         Gtk::Action::create("DupInstrument", _("_Duplicate Instrument")),
         sigc::mem_fun(*this, &MainWindow::on_action_duplicate_instrument)
+    );
+    actionGroup->add(
+        Gtk::Action::create("MoveInstrument", _("Move _Instrument To ...")),
+        Gtk::AccelKey(GDK_KEY_i, primaryModifierKey),
+        sigc::mem_fun(*this, &MainWindow::on_action_move_instr)
     );
     actionGroup->add(
         Gtk::Action::create("CombInstruments", _("_Combine Instruments ...")),
@@ -898,6 +906,10 @@ MainWindow::MainWindow() :
         "          <attribute name='label' translatable='yes'>Duplicate Instrument</attribute>"
         "          <attribute name='action'>AppMenu.DupInstrument</attribute>"
         "        </item>"
+        "        <item id='MoveInstrument'>"
+        "          <attribute name='label' translatable='yes'>Move Instrument To ...</attribute>"
+        "          <attribute name='action'>AppMenu.MoveInstrument</attribute>"
+        "        </item>"
         "        <item id='CombInstruments'>"
         "          <attribute name='label' translatable='yes'>Combine Instrument</attribute>"
         "          <attribute name='action'>AppMenu.CombInstruments</attribute>"
@@ -1026,6 +1038,10 @@ MainWindow::MainWindow() :
         "      <item id='DupInstrument'>"
         "        <attribute name='label' translatable='yes'>Duplicate Instrument</attribute>"
         "        <attribute name='action'>AppMenu.DupInstrument</attribute>"
+        "      </item>"
+        "      <item id='MoveInstrument'>"
+        "        <attribute name='label' translatable='yes'>Move Instrument To ...</attribute>"
+        "        <attribute name='action'>AppMenu.MoveInstrument</attribute>"
         "      </item>"
         "      <item id='CombInstruments'>"
         "        <attribute name='label' translatable='yes'>Combine Instruments</attribute>"
@@ -1165,6 +1181,7 @@ MainWindow::MainWindow() :
         "      <menu action='AssignScripts'/>"
         "      <menuitem action='AddInstrument'/>"
         "      <menuitem action='DupInstrument'/>"
+        "      <menuitem action='MoveInstrument'/>"
         "      <menuitem action='CombInstruments'/>"
         "      <separator/>"
         "      <menuitem action='RemoveInstrument'/>"
@@ -1204,6 +1221,7 @@ MainWindow::MainWindow() :
         "    <menuitem action='ScriptSlots'/>"
         "    <menuitem action='AddInstrument'/>"
         "    <menuitem action='DupInstrument'/>"
+        "    <menuitem action='MoveInstrument'/>"
         "    <menuitem action='CombInstruments'/>"
         "    <separator/>"
         "    <menuitem action='RemoveInstrument'/>"
@@ -3920,6 +3938,66 @@ void MainWindow::on_instrument_selection_change(Gtk::RadioMenuItem* item) {
     }
 }
 #endif
+
+void MainWindow::on_action_move_instr() {
+    gig::Instrument* instr = get_instrument();
+    if (!instr) return;
+
+    int currentIndex = getIndexOf(instr);
+
+    Gtk::Dialog dialog(_("Move Instrument"), true /*modal*/);
+#if (GTKMM_MAJOR_VERSION == 2 && GTKMM_MINOR_VERSION < 90) || GTKMM_MAJOR_VERSION < 2
+    Gtk::Adjustment adjustment(
+        currentIndex,
+        0 /*min*/, file->CountInstruments() - 1 /*max*/
+    );
+    Gtk::SpinButton spinBox(adjustment);
+#else
+    Gtk::SpinButton spinBox(
+        Gtk::Adjustment::create(
+            currentIndex,
+            0 /*min*/, file->CountInstruments() - 1 /*max*/
+        )
+    );
+#endif
+#if USE_GTKMM_BOX
+    dialog.get_content_area()->pack_start(spinBox);
+#else
+    dialog.get_vbox()->pack_start(spinBox);
+#endif
+#if HAS_GTKMM_STOCK
+    Gtk::Button* okButton = dialog.add_button(Gtk::Stock::OK, 0);
+    dialog.add_button(Gtk::Stock::CANCEL, 1);
+#else
+    Gtk::Button* okButton = dialog.add_button(_("_OK"), 0);
+    dialog.add_button(_("_Cancel"), 1);
+#endif
+    okButton->set_sensitive(false);
+    // show the dialog at a reasonable screen position
+    dialog.set_position(Gtk::WIN_POS_MOUSE);
+    // only enable the 'OK' button if entered new index is not instrument's
+    // current index already
+    spinBox.signal_value_changed().connect([&]{
+        okButton->set_sensitive( spinBox.get_value_as_int() != currentIndex );
+    });
+    // usability acceleration: if user hits enter key on the text entry field
+    // then auto trigger the 'OK' button
+    spinBox.signal_activate().connect([&]{
+        if (okButton->get_sensitive())
+            okButton->clicked();
+    });
+#if HAS_GTKMM_SHOW_ALL_CHILDREN
+    dialog.show_all_children();
+#endif
+    if (!dialog.run()) { // 'OK' selected ...
+        int newIndex = spinBox.get_value_as_int();
+        printf("MOVE TO %d\n", newIndex);
+        gig::Instrument* dst = file->GetInstrument(newIndex);
+        instr->MoveTo(dst);
+        __refreshEntireGUI();
+        select_instrument(instr);
+    }
+}
 
 void MainWindow::select_instrument(gig::Instrument* instrument) {
     if (!instrument) return;

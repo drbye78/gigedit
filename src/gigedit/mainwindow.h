@@ -410,6 +410,7 @@ protected:
 #if !USE_GTKMM_BUILDER
     void on_instrument_selection_change(Gtk::RadioMenuItem* item);
 #endif
+    void on_action_move_instr();
     void on_sel_change();
     void region_changed();
     void dimreg_changed();

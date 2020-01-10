@@ -1,5 +1,5 @@
 /*                                                         -*- c++ -*-
- * Copyright (C) 2007-2019 Andreas Persson
+ * Copyright (C) 2007-2020 Andreas Persson
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -146,6 +146,16 @@ inline static bool endsWith(const std::string& haystack, const std::string& need
     if (haystack.size() < needle.size()) return false;
     const std::string sub = haystack.substr(haystack.size() - needle.size(), needle.size());
     return (caseSensitive) ? (sub == needle) : (!strcasecmp(sub.c_str(), needle.c_str()));
+}
+
+inline int getIndexOf(gig::Instrument* instrument) {
+    gig::File* file = (gig::File*) instrument->GetParent();
+    for (int i = 0; true ; ++i) {
+        gig::Instrument* instr = file->GetInstrument(i);
+        if (!instr) break;
+        if (instr == instrument) return i;
+    }
+    return -1;
 }
 
 inline int getDimensionIndex(gig::dimension_t type, gig::Region* rgn) {
