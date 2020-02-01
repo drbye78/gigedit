@@ -49,9 +49,11 @@
 # ifdef LIBLINUXSAMPLER_HEADER_FILE
 #  include LIBLINUXSAMPLER_HEADER_FILE(scriptvm/ScriptVM.h)
 #  include LIBLINUXSAMPLER_HEADER_FILE(scriptvm/ScriptVMFactory.h)
+#  include LIBLINUXSAMPLER_HEADER_FILE(common/optional.h)
 # else
 #  include <linuxsampler/scriptvm/ScriptVM.h>
 #  include <linuxsampler/scriptvm/ScriptVMFactory.h>
+#  include <linuxsampler/common/optional.h>
 # endif
 #endif
 

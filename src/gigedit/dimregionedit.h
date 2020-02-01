@@ -50,6 +50,8 @@
 
 #include "paramedit.h"
 #include "global.h"
+#include "ScriptPatchVars.h"
+#include "wrapLabel.hh"
 
 class VelocityCurve : public Gtk::DrawingArea {
 public:
@@ -209,6 +211,9 @@ public:
 
     std::set<gig::DimensionRegion*> dimregs;
 
+    ScriptPatchVars scriptVars;
+    Gtk::Button editScriptSlotsButton;
+
 protected:
     sigc::signal<void, gig::DimensionRegion*> dimreg_to_be_changed_signal;
     sigc::signal<void, gig::DimensionRegion*> dimreg_changed_signal;
@@ -235,10 +240,11 @@ protected:
     Gtk::Tooltips tooltips;
 #endif
 
+    static const int tableSize = 10;
 #if USE_GTKMM_GRID
-    Gtk::Grid* table[9];
+    Gtk::Grid* table[tableSize];
 #else
-    Gtk::Table* table[9];
+    Gtk::Table* table[tableSize];
 #endif
 
     Gtk::Label* lSample;
@@ -357,6 +363,13 @@ protected:
     Gtk::Label* lLFO2;
 
     Gtk::Button buttonSelectSample;
+
+    Gtk::HBox scriptVarsDescrBox;
+#if GTKMM_MAJOR_VERSION < 3
+    view::WrapLabel m_labelPatchVarsDescr;
+#else
+    MultiLineLabel  m_labelPatchVarsDescr;
+#endif
 
     int rowno;
     int pageno;

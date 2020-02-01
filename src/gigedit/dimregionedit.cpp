@@ -439,6 +439,7 @@ DimRegionEdit::DimRegionEdit() :
     eSampleLoopInfinite(_("Infinite loop")),
     eSampleLoopPlayCount(_("Playback count"), 1),
     buttonSelectSample(UNICODE_LEFT_ARROW + "  " + _("Select Sample")),
+    editScriptSlotsButton(_("Edit Slots ...")),
     update_model(0)
 {
     // make synthesis parameter page tabs scrollable
@@ -584,7 +585,7 @@ DimRegionEdit::DimRegionEdit() :
         sigc::mem_fun(*this, &DimRegionEdit::onButtonSelectSamplePressed)
     );
 
-    for (int i = 0 ; i < 9 ; i++) {
+    for (int i = 0; i < tableSize; i++) {
 #if USE_GTKMM_GRID
         table[i] = new Gtk::Grid;
         table[i]->set_column_spacing(7);
@@ -1276,6 +1277,44 @@ DimRegionEdit::DimRegionEdit() :
     eSampleLoopInfinite.signal_value_changed().connect(
         sigc::mem_fun(*this, &DimRegionEdit::loop_infinite_toggled));
 
+
+    addHeader(_("Script Patch Variables"));
+
+    m_labelPatchVarsDescr.set_markup(
+        _("These are variables declared in scripts with keyword "
+          "<span color='#FF4FF3'><b>patch</b></span>. "
+          "A 'patch' variable allows to override its default value on a per "
+          "instrument basis. That way a script may be shared by instruments "
+          "while being able to fine tune certain script parameters for each "
+          "instrument individually if necessary. Overridden default values "
+          "are displayed in bold. To revert back to the script's default "
+          "value, select the variable(s) and hit <b>&#x232b;</b> or "
+          "<b>&#x2326;</b> key.")
+    );
+    scriptVarsDescrBox.set_spacing(13);
+    scriptVarsDescrBox.pack_start(m_labelPatchVarsDescr, true, true);
+    scriptVarsDescrBox.pack_start(editScriptSlotsButton, false, false);
+#if USE_GTKMM_GRID
+    table[pageno]->attach(scriptVarsDescrBox, 1, rowno, 2);
+#else
+    table[pageno]->attach(scriptVarsDescrBox, 1, 3, rowno, rowno + 1,
+                          Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+#endif
+    rowno++;
+
+#if GTKMM_MAJOR_VERSION >= 3
+    scriptVars.set_margin_top(20);
+#endif
+#if USE_GTKMM_GRID
+    table[pageno]->attach(scriptVars, 1, rowno, 2);
+#else
+
+    table[pageno]->attach(scriptVars, 1, 3, rowno, rowno + 1,
+                          Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND | Gtk::FILL);
+#endif
+    rowno++;
+
+
     append_page(*table[0], _("Sample"));
     append_page(*table[1], _("Amp (1)"));
     append_page(*table[2], _("Amp (2)"));
@@ -1285,6 +1324,7 @@ DimRegionEdit::DimRegionEdit() :
     append_page(*table[6], _("Filter (3)"));
     append_page(*table[7], _("Pitch"));
     append_page(*table[8], _("Misc"));
+    append_page(*table[9], _("Script"));
 
     Settings::singleton()->showTooltips.get_proxy().signal_changed().connect(
         sigc::mem_fun(*this, &DimRegionEdit::on_show_tooltips_changed)
@@ -1654,6 +1694,10 @@ void DimRegionEdit::set_dim_region(gig::DimensionRegion* d)
 
     wSample->set_text(d->pSample ? gig_to_utf8(d->pSample->pInfo->Name) :
                       _("NULL"));
+
+    scriptVars.setInstrument(
+        (gig::Instrument*) d->GetParent()->GetParent()
+    );
 
     update_loop_elements();
     VCFEnabled_toggled();

@@ -96,9 +96,9 @@ MainWindow::MainWindow() :
 
     if (!Settings::singleton()->autoRestoreWindowDimension) {
 #if GTKMM_MAJOR_VERSION >= 3
-        set_default_size(960, 600);
+        set_default_size(1010, -1);
 #else
-        set_default_size(865, 600);
+        set_default_size(915, -1);
 #endif
         set_position(Gtk::WIN_POS_CENTER);
     }
@@ -1549,6 +1549,30 @@ MainWindow::MainWindow() :
         sigc::mem_fun(*this, &MainWindow::select_sample)
     );
 
+    dimreg_edit.editScriptSlotsButton.signal_clicked().connect(
+        sigc::mem_fun(*this, &MainWindow::show_script_slots)
+    );
+    // simply sending the same signal (pair) to the sampler on 'patch' variable
+    // changes as the already existing signal (pair) when the user edits the
+    // script's source code, because the sampler would reload the source code
+    // and the 'patch' variables from the instrument on this signal anyway
+    dimreg_edit.scriptVars.signal_vars_to_be_changed.connect(
+        [this](gig::Instrument* instr) {
+            for (int i = 0; i < instr->ScriptSlotCount(); ++i) {
+                gig::Script* script = instr->GetScriptOfSlot(i);
+                signal_script_to_be_changed.emit(script);
+            }
+        }
+    );
+    dimreg_edit.scriptVars.signal_vars_changed.connect(
+        [this](gig::Instrument* instr) {
+            for (int i = 0; i < instr->ScriptSlotCount(); ++i) {
+                gig::Script* script = instr->GetScriptOfSlot(i);
+                signal_script_changed.emit(script);
+            }
+        }
+    );
+
     m_RegionChooser.signal_instrument_struct_to_be_changed().connect(
         sigc::hide(
             sigc::bind(
@@ -1922,7 +1946,10 @@ void MainWindow::on_sel_change()
 
     updateScriptListOfMenu();
 
-    m_RegionChooser.set_instrument(get_instrument());
+    gig::Instrument* instr = get_instrument();
+
+    m_RegionChooser.set_instrument(instr);
+    dimreg_edit.scriptVars.setInstrument(instr, true/*force update*/);
 
     if (Settings::singleton()->syncSamplerInstrumentSelection) {
         switch_sampler_instrument_signal.emit(get_instrument());

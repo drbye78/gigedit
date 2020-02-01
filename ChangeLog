@@ -46,6 +46,9 @@ Version SVN trunk (?)
   * Added widget class 'MultiLineLabel' to fix size issues with stock Gtk::Label
     on large text blocks.
   * Script Editor: highlight new NKSP 'patch' keyword in pink color.
+  * NKSP: Added support for managing script 'patch' variables for each
+    instrument; added a dedicated "Script" tab on right-hand side of Gigedit's
+    main window with a list view to manage these variables.
 
 Version 1.1.1 (2019-07-27)
 

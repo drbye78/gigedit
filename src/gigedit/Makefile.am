@@ -32,6 +32,7 @@ libgigedit_la_SOURCES = \
 	CombineInstrumentsDialog.cpp CombineInstrumentsDialog.h \
 	midirules.cpp midirules.h \
 	scripteditor.cpp scripteditor.h \
+	ScriptPatchVars.cpp ScriptPatchVars.h \
 	scriptslots.cpp scriptslots.h \
 	ReferencesView.cpp ReferencesView.h \
 	MacroEditor.cpp MacroEditor.h \
