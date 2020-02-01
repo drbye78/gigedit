@@ -30,7 +30,17 @@
 
 namespace view {
 
-
+/** @brief Multi-line label for gtk(mm) <= 2.
+ *
+ * This class is only used for gtk(mm) <= 2. If application is compiled against
+ * gtk(mm) >= 3 then this class is not compiled at all. gtk(mm) 3 added support
+ * for automatic multi-line labels by calling its set_line_wrap() method.
+ * However Gtk::Label may still cause size calculation problems under certain
+ * conditions. If you encountered such a problem, then use @c MultiLineLabel for
+ * for gtk(mm) >= 3 instead.
+ *
+ * @see MultiLineLabel for gtk(mm) >= 3
+ */
 class WrapLabel
    : public Gtk::Label
 {

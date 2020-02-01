@@ -433,4 +433,54 @@ namespace Glib {
 
 #endif
 
+#include <gtkmm/label.h>
+
+/** @brief Auto wrapped (multi-line) text, auto shrank to min. dimensions.
+ *
+ * This widgets is intended for large text blocks which are expected to require
+ * the text to be automatically wrapped (i.e. auto inserted line breaks) such
+ * that it would not exceed the label's maximum allowed width according to its
+ * parent container.
+ *
+ * This class overrides get_preferred_height_for_width_vfunc() to fix the
+ * default behaviour of Gtk::Label, which by default calculates a height under
+ * the assumption that EVERY word of the text had a line break, which would
+ * cause the label to claim much more vertical space than actually required for
+ * the text.
+ */
+class MultiLineLabel : public Gtk::Label {
+public:
+    MultiLineLabel() : Gtk::Label() {
+        #if GTKMM_MAJOR_VERSION >= 3
+        set_line_wrap();
+        #endif
+    }
+
+    void set_markup(const Glib::ustring& s) {
+        Gtk::Label::set_markup(s);
+        m_markup = s;
+    }
+
+    void get_preferred_height_for_width_vfunc(int width, int& minimum_height, int& natural_height) const {
+        Gtk::Label::get_preferred_height_for_width_vfunc(width, minimum_height, natural_height);
+        //printf("super suggests minimum_height=%d natural_height=%d\n", minimum_height, natural_height);
+
+        Pango::Layout* origLayout = const_cast<Pango::Layout*>(get_layout().operator->());
+        Glib::RefPtr<Pango::Layout> layout = origLayout->copy();
+        Glib::ustring s = (!m_markup.empty()) ? m_markup : get_text();
+        layout->set_markup(s);
+        int w, h;
+        layout->get_pixel_size(w, h);
+        h += get_margin_top() + get_margin_bottom();
+        //printf("calculated w=%d h=%d\n", w, h);
+
+        minimum_height = h;
+        if (natural_height < h)
+            natural_height = h;
+    }
+
+private:
+    Glib::ustring m_markup;
+};
+
 #endif // GIGEDIT_COMPAT_H

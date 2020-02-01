@@ -43,6 +43,8 @@ Version SVN trunk (?)
     instruments list view from opening its properties dialog.
   * Added "Move Instrument To ..." menu action (available as Ctrl + i shortcut)
     which shows a small dialog for entering the instrument's new index.
+  * Added widget class 'MultiLineLabel' to fix size issues with stock Gtk::Label
+    on large text blocks.
 
 Version 1.1.1 (2019-07-27)
 
