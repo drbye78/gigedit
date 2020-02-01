@@ -45,6 +45,7 @@ Version SVN trunk (?)
     which shows a small dialog for entering the instrument's new index.
   * Added widget class 'MultiLineLabel' to fix size issues with stock Gtk::Label
     on large text blocks.
+  * Script Editor: highlight new NKSP 'patch' keyword in pink color.
 
 Version 1.1.1 (2019-07-27)
 

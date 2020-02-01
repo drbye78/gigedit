@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2014-2019 Christian Schoenebeck
+    Copyright (c) 2014-2020 Christian Schoenebeck
     
     This file is part of "gigedit" and released under the terms of the
     GNU General Public License version 2.
@@ -86,6 +86,7 @@ protected:
     Glib::RefPtr<Gtk::TextBuffer::Tag> m_functionTag;
     Glib::RefPtr<Gtk::TextBuffer::Tag> m_numberTag;
     Glib::RefPtr<Gtk::TextBuffer::Tag> m_stringTag;
+    Glib::RefPtr<Gtk::TextBuffer::Tag> m_patchTag;
     Glib::RefPtr<Gtk::TextBuffer::Tag> m_commentTag;
     Glib::RefPtr<Gtk::TextBuffer::Tag> m_preprocTag;
     Glib::RefPtr<Gtk::TextBuffer::Tag> m_errorTag;

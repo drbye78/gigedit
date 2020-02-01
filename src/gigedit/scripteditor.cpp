@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2014-2019 Christian Schoenebeck
+    Copyright (c) 2014-2020 Christian Schoenebeck
     
     This file is part of "gigedit" and released under the terms of the
     GNU General Public License version 2.
@@ -138,6 +138,11 @@ ScriptEditor::ScriptEditor() :
     m_stringTag = Gtk::TextBuffer::Tag::create();
     m_stringTag->property_foreground() = "#c40c0c"; // red
     m_tagTable->add(m_stringTag);
+
+    m_patchTag = Gtk::TextBuffer::Tag::create();
+    m_patchTag->property_foreground() = "#FF4FF3"; // pink
+    m_patchTag->property_weight() = PANGO_WEIGHT_BOLD;
+    m_tagTable->add(m_patchTag);
 
     m_commentTag = Gtk::TextBuffer::Tag::create();
     m_commentTag->property_foreground() = "#9c9c9c"; // gray
@@ -605,7 +610,10 @@ void ScriptEditor::updateSyntaxHighlightingByVM() {
         const LinuxSampler::VMSourceToken& token = tokens[i];
 
         if (token.isKeyword()) {
-            applyCodeTag(m_textBuffer, token, m_keywordTag);
+            if (token.text() == "patch")
+                applyCodeTag(m_textBuffer, token, m_patchTag);
+            else
+                applyCodeTag(m_textBuffer, token, m_keywordTag);
         } else if (token.isVariableName()) {
             applyCodeTag(m_textBuffer, token, m_variableTag);
         } else if (token.isIdentifier()) {
