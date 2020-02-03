@@ -117,6 +117,9 @@ public:
         adjust->set_upper(upper);
 #endif
     }
+    void set_increments(double step, double page) {
+        spinbutton.set_increments(step, page);
+    }
     void on_show_tooltips_changed();
 };
 

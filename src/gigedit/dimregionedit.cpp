@@ -446,6 +446,18 @@ DimRegionEdit::DimRegionEdit() :
     // (workaround for GTK3: default theme uses huge tabs which breaks layout)
     set_scrollable();
 
+    // use more appropriate increment/decrement steps for these spinboxes
+    eEG1PreAttack.set_increments(0.1, 5.0);
+    eEG2PreAttack.set_increments(0.1, 5.0);
+    eEG1Sustain.set_increments(0.1, 5.0);
+    eEG2Sustain.set_increments(0.1, 5.0);
+    eLFO1Frequency.set_increments(0.02, 0.2);
+    eLFO2Frequency.set_increments(0.02, 0.2);
+    eLFO3Frequency.set_increments(0.02, 0.2);
+    eLFO1Phase.set_increments(1.0, 10.0);
+    eLFO2Phase.set_increments(1.0, 10.0);
+    eLFO3Phase.set_increments(1.0, 10.0);
+
     connect(eEG1PreAttack, &gig::DimensionRegion::EG1PreAttack);
     connect(eEG1Attack, &gig::DimensionRegion::EG1Attack);
     connect(eEG1Decay1, &gig::DimensionRegion::EG1Decay1);

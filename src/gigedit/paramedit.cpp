@@ -205,13 +205,29 @@ ReadOnlyLabelWidget::ReadOnlyLabelWidget(const char* leftHandText, const char* r
     text.set_text(rightHandText);
 }
 
+static double stepForDecimals(int decimals) {
+    switch (decimals) {
+        case 0: return 1.0;
+        case 1: return 0.1;
+        case 2: default: return 0.01;
+    }
+}
+
+static double pageForDecimals(int decimals) {
+    switch (decimals) {
+        case 0: return 10.0;
+        case 1: return 1.0;
+        case 2: default: return 0.1;
+    }
+}
+
 NumEntry::NumEntry(const char* labelText, double lower, double upper,
                    int decimals) :
     LabelWidget(labelText, box),
 #if (GTKMM_MAJOR_VERSION == 2 && GTKMM_MINOR_VERSION < 90) || GTKMM_MAJOR_VERSION < 2
-    adjust(lower, lower, upper, 1, 10),
+    adjust(lower, lower, upper, stepForDecimals(decimals), pageForDecimals(decimals)),
 #else
-    adjust(Gtk::Adjustment::create(lower, lower, upper, 1, 10)),
+    adjust(Gtk::Adjustment::create(lower, lower, upper, stepForDecimals(decimals), pageForDecimals(decimals))),
 #endif
     scale(adjust),
     spinbutton(adjust)
@@ -241,6 +257,7 @@ NumEntryGain::NumEntryGain(const char* labelText,
     coeff(coeff),
     connected(true)
 {
+    spinbutton.set_increments(0.1, 1.0);
     spinbutton.signal_value_changed().connect(
         sigc::mem_fun(*this, &NumEntryGain::value_changed));
 }

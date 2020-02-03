@@ -49,6 +49,9 @@ Version SVN trunk (?)
   * NKSP: Added support for managing script 'patch' variables for each
     instrument; added a dedicated "Script" tab on right-hand side of Gigedit's
     main window with a list view to manage these variables.
+  * Use more appropriate stepping/paging increments/decrements for spinboxes'
+    plus/minus buttons (depending on the individual parameter spinbutton
+    actually controls).
 
 Version 1.1.1 (2019-07-27)
 
