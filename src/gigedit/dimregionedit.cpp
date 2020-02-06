@@ -440,6 +440,7 @@ DimRegionEdit::DimRegionEdit() :
     eSampleLoopPlayCount(_("Playback count"), 1),
     buttonSelectSample(UNICODE_LEFT_ARROW + "  " + _("Select Sample")),
     editScriptSlotsButton(_("Edit Slots ...")),
+    dimregion(NULL),
     update_model(0)
 {
     // make synthesis parameter page tabs scrollable
