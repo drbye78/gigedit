@@ -126,7 +126,7 @@ protected:
                                    const Glib::ustring value);
 private:
     ::gig::Instrument* m_instrument;
-    //bool m_editing;
+    bool m_editing;
 };
 
 #endif // SCRIPT_PATCH_VARS_H

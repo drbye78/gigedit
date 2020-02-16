@@ -35,7 +35,7 @@ static gboolean onSelectCursorParent(GtkTreeView* treeview, gpointer userdata) {
 }
 
 ScriptPatchVars::ScriptPatchVars() :
-    m_ignoreTreeViewValueChange(false), m_instrument(NULL)/*, m_editing(false)*/
+    m_ignoreTreeViewValueChange(false), m_instrument(NULL), m_editing(false)
 {
     // create treeview (including its data model)
     m_treeStore = VarsTreeStore::create(m_treeModel);
@@ -84,6 +84,14 @@ ScriptPatchVars::ScriptPatchVars() :
             dynamic_cast<Gtk::CellRendererText*>(column->get_first_cell());
         column->add_attribute(cellrenderer->property_foreground(), m_treeModel.m_col_value_color);
         column->add_attribute(cellrenderer->property_weight(), m_treeModel.m_col_value_weight);
+        cellrenderer->signal_editing_started().connect(
+            [this](Gtk::CellEditable*, const Glib::ustring&) {
+                m_editing = true;
+            }
+        );
+        cellrenderer->signal_editing_canceled().connect([this]{
+            m_editing = false;
+        });
     }
     m_treeView.set_headers_visible(true);
     m_treeView.get_selection()->signal_changed().connect(
@@ -353,7 +361,7 @@ void ScriptPatchVars::deleteSelectedRows() {
 
 void ScriptPatchVars::deleteRows(const std::vector<Gtk::TreeModel::Path>& rows) {
     // ignore the backspace key here while user is editing some value
-    if (m_ignoreTreeViewValueChange /*|| m_editing*/) return;
+    if (m_ignoreTreeViewValueChange || m_editing) return;
     if (!m_instrument) return; // just to be sure
 
     m_ignoreTreeViewValueChange = true;
@@ -379,7 +387,7 @@ void ScriptPatchVars::deleteRows(const std::vector<Gtk::TreeModel::Path>& rows) 
 }
 
 void ScriptPatchVars::onValueCellEdited(const Glib::ustring& sPath, const Glib::ustring& text) {
-    //m_editing = false;
+    m_editing = false;
     Gtk::TreePath path(sPath);
     Gtk::TreeModel::iterator iter = m_treeStore->get_iter(path);
     onTreeViewRowValueChanged(path, iter, text);
@@ -388,7 +396,7 @@ void ScriptPatchVars::onValueCellEdited(const Glib::ustring& sPath, const Glib::
 void ScriptPatchVars::onTreeViewRowChanged(const Gtk::TreeModel::Path& path,
                                            const Gtk::TreeModel::iterator& iter)
 {
-    //m_editing = false;
+    m_editing = false;
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
     Glib::ustring value = row[m_treeModel.m_col_value];
@@ -399,7 +407,7 @@ void ScriptPatchVars::onTreeViewRowValueChanged(const Gtk::TreeModel::Path& path
                                                 const Gtk::TreeModel::iterator& iter,
                                                 const Glib::ustring value)
 {
-    //m_editing = false;
+    m_editing = false;
     if (m_ignoreTreeViewValueChange || !m_instrument) return;
 
     Gtk::TreeModel::Row row = *iter;
