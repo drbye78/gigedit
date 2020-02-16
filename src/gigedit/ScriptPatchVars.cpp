@@ -105,13 +105,15 @@ ScriptPatchVars::ScriptPatchVars() :
     (
         sigc::mem_fun(*this, &ScriptPatchVars::onTreeViewKeyRelease)
     );
-    // Gtk "row-activated" signal (Gtkmm's signal_row_activated) is only fired
-    // if this single click property is set to true
     //m_treeView.set_activate_on_single_click(true);
     m_treeView.signal_row_activated().connect(
-        [this](const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
-            printf("row activated !!!!\n");
-            //m_editing = true; // so we can detect while user is editing some value
+        [this](const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column) {
+            // open script source code editor for double clicked script title row
+            Gtk::TreeModel::iterator iter = m_treeStore->get_iter(path);
+            Gtk::TreeModel::Row row = *iter;
+            gig::Script* script = row[m_treeModel.m_col_script];
+            if (!script || row[m_treeModel.m_col_value] != "✎") return;
+            signal_edit_script.emit(script);
         }
     );
     m_treeView.set_has_tooltip(true);
@@ -266,12 +268,12 @@ void ScriptPatchVars::buildTreeViewSlot(const Gtk::TreeModel::Row& parentRow, in
     row[m_treeModel.m_col_name] = pScript->Name + " <sup>Slot " + ToString(iScriptSlot+1) + "</sup>";
     row[m_treeModel.m_col_name_weight] = PANGO_WEIGHT_BOLD;
     row[m_treeModel.m_col_type] = "Script";
-    row[m_treeModel.m_col_value] = "";
+    row[m_treeModel.m_col_value] = "✎"; // make user visually aware that he might access script's source code here
     row[m_treeModel.m_col_slot]  = -1;
     row[m_treeModel.m_col_allowTextEntry] = false;
     row[m_treeModel.m_col_editable] = false;
-    row[m_treeModel.m_col_script] = NULL;
-    row[m_treeModel.m_col_value_tooltip] = "";
+    row[m_treeModel.m_col_script] = pScript;
+    row[m_treeModel.m_col_value_tooltip] = _("Double click or hit ⏎ to open script code editor.");
 
     std::map<std::string,PatchVar> vars = getPatchVars(m_instrument, iScriptSlot);
     for (const auto& var : vars) {
@@ -325,12 +327,12 @@ bool ScriptPatchVars::onQueryTreeViewTooltip(int x, int y, bool keyboardTip,
         m_treeView.get_path_at_pos(x, y, path, pointedColumn, cellX, cellY);
     }
     Gtk::TreeViewColumn* valueColumn = m_treeView.get_column(2);
-    if (pointedColumn == valueColumn) { // mouse hovers value column ...
+    if (pointedColumn == valueColumn || row[m_treeModel.m_col_value] == "✎") { // mouse hovers value column or on any "Script" meta row's columns...
         const Glib::ustring tip = row[m_treeModel.m_col_value_tooltip];
         if (tip.empty()) return false; // don't show tooltip
         // show model / cell's assigned tooltip
         tooltip->set_markup(tip);
-        m_treeView.set_tooltip_cell(tooltip, &path, valueColumn, NULL);
+        m_treeView.set_tooltip_cell(tooltip, &path, pointedColumn, NULL);
         return true; // show tooltip
     }
     return false; // don't show tooltip

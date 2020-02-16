@@ -612,6 +612,7 @@ protected:
     void on_action_add_script_group();
     void on_action_add_script();
     void on_action_edit_script();
+    void editScript(gig::Script* script);
     void on_action_remove_script();
 
     void on_action_add_instrument();

@@ -52,6 +52,9 @@ Version SVN trunk (?)
   * Use more appropriate stepping/paging increments/decrements for spinboxes'
     plus/minus buttons (depending on the individual parameter spinbutton
     actually controls).
+  * Script 'patch' variables editor: double click anywhere on a script's title
+    row (or hitting <enter> while that row is selected) opens script source code
+    editor for that double clicked script.
 
 Version 1.1.1 (2019-07-27)
 

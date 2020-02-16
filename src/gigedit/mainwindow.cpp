@@ -1572,6 +1572,11 @@ MainWindow::MainWindow() :
             }
         }
     );
+    dimreg_edit.scriptVars.signal_edit_script.connect(
+        [this](gig::Script* script) {
+            editScript(script);
+        }
+    );
 
     m_RegionChooser.signal_instrument_struct_to_be_changed().connect(
         sigc::hide(
@@ -4553,8 +4558,11 @@ void MainWindow::on_action_edit_script() {
     if (!it) return;
     Gtk::TreeModel::Row row = *it;
     gig::Script* script = row[m_ScriptsModel.m_col_script];
-    if (!script) return;
+    editScript(script);
+}
 
+void MainWindow::editScript(gig::Script* script) {
+    if (!script) return;
     ScriptEditor* editor = new ScriptEditor;
     editor->signal_script_to_be_changed.connect(
         signal_script_to_be_changed.make_slot()

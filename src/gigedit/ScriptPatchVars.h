@@ -55,6 +55,7 @@ public:
 
     sigc::signal<void, gig::Instrument*> signal_vars_to_be_changed;
     sigc::signal<void, gig::Instrument*> signal_vars_changed;
+    sigc::signal<void, gig::Script*> signal_edit_script;
 
     class VarsModel : public Gtk::TreeModel::ColumnRecord {
     public:
