@@ -3757,6 +3757,9 @@ void MainWindow::onScriptSlotsModified(gig::Instrument* pInstrument) {
 
     // causes the sampler to reload the instrument with the new script
     on_sel_change();
+
+    // force script 'patch' variables editor ("Script" tab) to be refreshed
+    dimreg_edit.scriptVars.setInstrument(pInstrument, true/*force update*/);
 }
 
 void MainWindow::assignScript(gig::Script* pScript) {
@@ -4567,9 +4570,13 @@ void MainWindow::editScript(gig::Script* script) {
     editor->signal_script_to_be_changed.connect(
         signal_script_to_be_changed.make_slot()
     );
-    editor->signal_script_changed.connect(
-        signal_script_changed.make_slot()
-    );
+    editor->signal_script_changed.connect([this](gig::Script* script) {
+        // signal to sampler (which will reload the script due to this)
+        signal_script_changed.emit(script);
+        // force script 'patch' variables editor ("Script" tab) to be refreshed
+        gig::Instrument* instr = get_instrument();
+        dimreg_edit.scriptVars.setInstrument(instr, true/*force update*/);
+    });
     editor->setScript(script);
     //editor->reparent(*this);
     editor->show();
@@ -5333,18 +5340,7 @@ void MainWindow::script_double_clicked(const Gtk::TreeModel::Path& path,
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
     gig::Script* script = row[m_ScriptsModel.m_col_script];
-    if (!script) return;
-
-    ScriptEditor* editor = new ScriptEditor;
-    editor->signal_script_to_be_changed.connect(
-        signal_script_to_be_changed.make_slot()
-    );
-    editor->signal_script_changed.connect(
-        signal_script_changed.make_slot()
-    );
-    editor->setScript(script);
-    //editor->reparent(*this);
-    editor->show();
+    editScript(script);
 }
 
 void MainWindow::instrument_name_changed(const Gtk::TreeModel::Path& path,
