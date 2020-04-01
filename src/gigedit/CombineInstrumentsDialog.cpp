@@ -1,6 +1,6 @@
 /*
-    Copyright (c) 2014-2019 Christian Schoenebeck
-    
+    Copyright (c) 2014-2020 Christian Schoenebeck
+
     This file is part of "gigedit" and released under the terms of the
     GNU General Public License version 2.
 */
@@ -989,14 +989,18 @@ CombineInstrumentsDialog::CombineInstrumentsDialog(Gtk::Window& parent, gig::Fil
 
 void CombineInstrumentsDialog::on_order_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
 {
+    #if DEBUG_COMBINE_INSTRUMENTS
     printf("Drag begin\n");
+    #endif
     first_call_to_drag_data_get = true;
 }
 
 void CombineInstrumentsDialog::on_order_drag_data_get(const Glib::RefPtr<Gdk::DragContext>& context,
                                                        Gtk::SelectionData& selection_data, guint, guint)
 {
+    #if DEBUG_COMBINE_INSTRUMENTS
     printf("Drag data get\n");
+    #endif
     if (!first_call_to_drag_data_get) return;
     first_call_to_drag_data_get = false;
 
@@ -1016,7 +1020,9 @@ void CombineInstrumentsDialog::on_order_drag_data_get(const Glib::RefPtr<Gdk::Dr
         printf("Drag data get: !src\n");
         return;
     }
+    #if DEBUG_COMBINE_INSTRUMENTS
     printf("src=%ld\n", (size_t)src);
+    #endif
 
     // pass the source gig::Instrument as pointer
     selection_data.set(selection_data.get_target(), 0/*unused*/, (const guchar*)&src,
@@ -1027,7 +1033,9 @@ void CombineInstrumentsDialog::on_order_drop_drag_data_received(
     const Glib::RefPtr<Gdk::DragContext>& context, int x, int y,
     const Gtk::SelectionData& selection_data, guint, guint time)
 {
+    #if DEBUG_COMBINE_INSTRUMENTS
     printf("Drag data received\n");
+    #endif
     if (!selection_data.get_data()) {
         printf("selection_data.get_data() == NULL\n");
         return;
@@ -1038,7 +1046,9 @@ void CombineInstrumentsDialog::on_order_drop_drag_data_received(
         printf("!src\n");
         return;
     }
+    #if DEBUG_COMBINE_INSTRUMENTS
     printf("src=%ld\n", (size_t)src);
+    #endif
 
     gig::Instrument* dst = NULL;
     {
@@ -1055,7 +1065,9 @@ void CombineInstrumentsDialog::on_order_drop_drag_data_received(
         return;
     }
 
+    #if DEBUG_COMBINE_INSTRUMENTS
     printf("dragdrop received src='%s' dst='%s'\n", src->pInfo->Name.c_str(), dst->pInfo->Name.c_str());
+    #endif
 
     // swap the two items
     typedef Gtk::TreeModel::Children Children;
